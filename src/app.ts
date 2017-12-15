@@ -19,3 +19,10 @@ app.post('/signin', json(), (req, res) => {
     .then(response => res.send({ success: true, response }))
     .catch(error => res.status(404).send({ success: false, error: error.message }));
 });
+
+app.post('/check', (req, res) => {
+    const { token } = req.headers;
+    User.check(token as string)
+    .then(response => res.send({ success: true, response }))
+    .catch(error => res.status(404).send({ success: false, error: error.message }));
+});

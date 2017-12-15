@@ -1,6 +1,6 @@
 import { compare, hash } from 'bcrypt';
 import { model, Schema } from 'mongoose';
-import { createToken } from '../helpers/jwt';
+import { createToken, verifyToken } from '../helpers/jwt';
 
 const userSchema = new Schema({
     email: { type: String, trim: true, required: true, unique: true },
@@ -34,5 +34,15 @@ export class User extends UserMongo {
         const userInfo = user.toObject() as { password: string };
         delete userInfo.password;
         return userInfo;
+    }
+
+    static async check(token: string) {
+        const { _id } = await verifyToken(token) as any;
+        const user = await User.findById(_id) as User;
+        if (!user) throw new Error('User khong ton tai.');
+        const userInfo = user.toObject() as { password: string };
+        delete userInfo.password;
+        const newToken = await createToken({ _id: user._id });
+        return { user: userInfo, token: newToken };
     }
 }
