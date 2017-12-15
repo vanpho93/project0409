@@ -26,6 +26,9 @@ export class User extends UserMongo {
     static async signUp(email: string, password: string, name: string) {
         const encrypted = await hash(password, 8);
         const user = new User({ email, name, password: encrypted });
-        return user.save();
+        await user.save();
+        const userInfo = user.toObject() as { password: string };
+        delete userInfo.password;
+        return userInfo;
     }
 }
