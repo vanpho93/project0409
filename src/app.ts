@@ -12,3 +12,10 @@ app.post('/signup', json(), (req, res) => {
     .then(userInfo => res.send({ success: true, user: userInfo }))
     .catch(error => res.status(404).send({ success: false, error: error.message }));
 });
+
+app.post('/signin', json(), (req, res) => {
+    const { email, password } = req.body;
+    User.signIn(email, password)
+    .then(response => res.send({ success: true, response }))
+    .catch(error => res.status(404).send({ success: false, error: error.message }));
+});

@@ -3,19 +3,16 @@ import * as request from 'supertest';
 import { app } from '../../../src/app';
 import { User } from '../../../src/models/User';
 
-describe.only('Test POST /signup', () => {
-    it('Can sign up with full info', async () => {
-        const body = { email: 'a@gmail.com', password: '123', name: 'Pho' };
-        await request(app).post('/signup').send(body);
-        const user = await User.findOne({ email: 'a@gmail.com' }) as User;
-        assert.equal(user.name, 'Pho');
+describe.only('Test POST /signin', () => {
+    beforeEach('Sign up 1 user for test', async () => {
+        await User.signUp('pho@gmail.com', '123', 'Pho');
     });
 
-    it('Cannot sign up with dup email', async () => {
-        await User.signUp('vanpho1@gmail.com', '123', 'Pho');
-        const body = { email: 'vanpho1@gmail.com', password: '123', name: 'Pho' };
-        const res = await request(app).post('/signup').send(body);
-        assert.equal(res.body.success, false);
-        assert.equal(res.status, 404);
+    it ('Can sign in with right info', async () => {
+        const response = await request(app)
+        .post('/signin')
+        .send({ email: 'pho@gmail.com', password: '123' });
+        assert.equal(response.status, 200);
+        assert.equal(response.body.response.user.name, 'Pho');
     });
 });
