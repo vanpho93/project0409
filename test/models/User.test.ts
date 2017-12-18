@@ -35,8 +35,8 @@ describe('Test sign in', () => {
     });
 
     it('Can sign in with right email and password', async () => {
-        const user = await User.signIn('vanpho1@gmail.com', '123');
-        assert.equal(user.email, 'vanpho1@gmail.com');
+        const response = await User.signIn('vanpho1@gmail.com', '123');
+        assert.equal(response.user.email, 'vanpho1@gmail.com');
     });
 
     it('Cannot sign in with wrong email', async () => {

@@ -21,7 +21,7 @@ export class User extends UserMongo {
         if (!user) throw new Error('User khong ton tai.');
         const same = await compare(password, user.password);
         if (!same) throw new Error('Sai password.');
-        const userInfo = user.toObject() as { password: string };
+        const userInfo = user.toObject() as { email: string, password: string };
         delete userInfo.password;
         const token = await createToken({ _id: user._id });
         return { user: userInfo, token };
