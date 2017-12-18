@@ -10,7 +10,7 @@ export function createToken(obj) {
     });
 }
 
-export function verifyToken(token) {
+export function verifyToken(token): Promise<any> {
     return new Promise((resolve, reject) => {
         verify(token, KEY, (err, obj) => {
             if (err) return reject(err);
