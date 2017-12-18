@@ -3,7 +3,7 @@ import * as request from 'supertest';
 import { app } from '../../../src/app';
 import { User } from '../../../src/models/User';
 
-describe.only('Test POST /user/check', () => {
+describe('Test POST /user/check', () => {
     let token;
     beforeEach('Sign up, sign in to get token for test', async () => {
         await User.signUp('pho@gmail.com', '123', 'Pho');
