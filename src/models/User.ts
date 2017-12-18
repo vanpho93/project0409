@@ -5,7 +5,8 @@ import { createToken, verifyToken } from '../helpers/jwt';
 const userSchema = new Schema({
     email: { type: String, trim: true, required: true, unique: true },
     password: { type: String, trim: true, required: true },
-    name: { type: String, trim: true, required: true }
+    name: { type: String, trim: true, required: true },
+    stories: [{ type: Schema.Types.ObjectId, ref: 'Story' }],
 });
 
 const UserMongo = model('User', userSchema);
