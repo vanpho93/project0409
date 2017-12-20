@@ -13,6 +13,7 @@ const StoryMongo = model('Story', storySchema);
 export class Story extends StoryMongo {
     content: string;
     author: User;
+    fans: User[];
     static async addStory(idUser: string, content: string) {
         const story = new Story({ author: idUser, content });
         await story.save();

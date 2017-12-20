@@ -4,13 +4,12 @@ import { app } from '../../../src/app';
 import { Story } from '../../../src/models/Story';
 import { User } from '../../../src/models/User';
 
-describe('Test DELETE /story/:id', () => {
+describe.only('Test PUT /like/:idStory', () => {
     let token1;
     let token2;
     let idUser1;
     let idUser2;
     let idStory1;
-    let idStory2;
     beforeEach('Sign up, sign in to get token for test', async () => {
         await User.signUp('pho@gmail.com', '123', 'Pho');
         await User.signUp('ohp@gmail.com', '123', 'Pho');
@@ -23,22 +22,18 @@ describe('Test DELETE /story/:id', () => {
         const story1 = await Story.addStory(idUser1, 'Javascript');
         const story2 = await Story.addStory(idUser2, 'Javascript');
         idStory1 = story1._id;
-        idStory2 = story2._id;
     });
 
-    it('Can remove story with right token', async () => {
-        const response = await request(app).delete(`/story/${idStory1}`).set({ token: token1 });
-        assert.equal(response.status, 200);
-        const count = await Story.count({});
-        assert.equal(count, 1);
-        const user1 = await User.findById(idUser1) as User;
-        assert.equal(user1.stories.length, 0);
-    });
-
-    it('Cannot remove story with other\'s token', async () => {
-        const response = await request(app).delete(`/story/${idStory1}`).set({ token: token2 });
-        assert.equal(response.status, 404);
-        const count = await Story.count({});
-        assert.equal(count, 2);
+    it('Can like story with 2 users', async () => {
+        await request(app)
+        .put(`/like/${idStory1}`)
+        .set({ token: token1 })
+        .send({});
+        await request(app)
+        .put(`/like/${idStory1}`)
+        .set({ token: token2 })
+        .send({});
+        const story = await Story.findById(idStory1) as Story;
+        console.log(story.fans);
     });
 });
