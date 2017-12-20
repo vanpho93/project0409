@@ -19,4 +19,13 @@ export class Story extends StoryMongo {
         await User.findByIdAndUpdate(idUser, { $push: { stories: story._id } });
         return story;
     }
+
+    static async removeStory(idUser: string, idStory: string) {
+        const removedStory = await Story.findOneAndRemove({
+            _id: idStory,
+            author: idUser
+        });
+        await User.findByIdAndUpdate(idUser, { $pull: { stories: idStory } });
+        return removedStory;
+    }
 }

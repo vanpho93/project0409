@@ -13,3 +13,9 @@ storyRoute.post('/', userMiddleware, (req: RequestWithUser, res) => {
     .then(story => res.send({ success: true, story }))
     .catch(error => res.status(404).send({ success: false, error: error.message }));
 });
+
+storyRoute.delete('/:idStory', userMiddleware, (req: RequestWithUser, res) => {
+    Story.removeStory(req.userId, req.params.idStory)
+    .then(story => res.send({ success: true, story }))
+    .catch(error => res.status(404).send({ success: false, error: error.message }));
+});
