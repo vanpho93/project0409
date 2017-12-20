@@ -6,15 +6,15 @@ import { userMiddleware } from './userMiddleware';
 
 export const storyRoute = Router();
 
+storyRoute.use(userMiddleware);
 storyRoute.use(json());
-
-storyRoute.post('/', userMiddleware, (req: RequestWithUser, res) => {
+storyRoute.post('/', (req: RequestWithUser, res) => {
     Story.addStory(req.userId, req.body.content)
     .then(story => res.send({ success: true, story }))
     .catch(error => res.status(404).send({ success: false, error: error.message }));
 });
 
-storyRoute.delete('/:idStory', userMiddleware, (req: RequestWithUser, res) => {
+storyRoute.delete('/:idStory', (req: RequestWithUser, res) => {
     Story.removeStory(req.userId, req.params.idStory)
     .then(story => res.send({ success: true, story }))
     .catch(error => res.status(404).send({ success: false, error: error.message }));
