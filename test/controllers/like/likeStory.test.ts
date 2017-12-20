@@ -28,12 +28,37 @@ describe.only('Test PUT /like/:idStory', () => {
         await request(app)
         .put(`/like/${idStory1}`)
         .set({ token: token1 })
-        .send({});
+        .send({ isLike: true });
         await request(app)
         .put(`/like/${idStory1}`)
         .set({ token: token2 })
-        .send({});
+        .send({ isLike: true });
         const story = await Story.findById(idStory1) as Story;
-        console.log(story.fans);
+        assert.equal(story.fans.length, 2);
+    });
+
+    it('Can dislike story', async () => {
+        await request(app)
+        .put(`/like/${idStory1}`)
+        .set({ token: token1 })
+        .send({ isLike: true });
+        await request(app)
+        .put(`/like/${idStory1}`)
+        .set({ token: token2 })
+        .send({ isLike: true });
+        const story = await Story.findById(idStory1) as Story;
+        assert.equal(story.fans.length, 2);
+        await request(app)
+        .put(`/like/${idStory1}`)
+        .set({ token: token2 })
+        .send({ isLike: false });
+        const story2 = await Story.findById(idStory1) as Story;
+        assert.equal(story2.fans.length, 1);
+        await request(app)
+        .put(`/like/${idStory1}`)
+        .set({ token: token1 })
+        .send({ isLike: false });
+        const story3 = await Story.findById(idStory1) as Story;
+        assert.equal(story3.fans.length, 0);
     });
 });

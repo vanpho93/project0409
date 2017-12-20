@@ -36,4 +36,10 @@ export class Story extends StoryMongo {
         if (!story) throw new Error('Cannot find story');
         return story;
     }
+
+    static async dislikeStory(idUser: string, idStory: string) {
+        const story = await Story.findByIdAndUpdate(idStory, { $pull: { fans: idUser } }, { new: true });
+        if (!story) throw new Error('Cannot find story');
+        return story;
+    }
 }
