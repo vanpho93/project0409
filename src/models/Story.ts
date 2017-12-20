@@ -29,4 +29,10 @@ export class Story extends StoryMongo {
         await User.findByIdAndUpdate(idUser, { $pull: { stories: idStory } });
         return removedStory;
     }
+
+    static async likeStory(idUser: string, idStory: string) {
+        const story = await Story.findByIdAndUpdate(idStory, { $addToSet: { fans: idUser } }, { new: true });
+        if (!story) throw new Error('Cannot find story');
+        return story;
+    }
 }
