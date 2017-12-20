@@ -25,6 +25,7 @@ export class Story extends StoryMongo {
             _id: idStory,
             author: idUser
         });
+        if (!removedStory) throw new Error('Cannot find story');
         await User.findByIdAndUpdate(idUser, { $pull: { stories: idStory } });
         return removedStory;
     }

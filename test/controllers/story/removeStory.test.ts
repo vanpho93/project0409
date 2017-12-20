@@ -36,6 +36,9 @@ describe.only('Test DELETE /story/:id', () => {
     });
 
     it('Cannot remove story with other\'s token', async () => {
-
+        const response = await request(app).delete(`/story/${idStory1}`).set({ token: token2 });
+        assert.equal(response.status, 404);
+        const count = await Story.count({});
+        assert.equal(count, 2);
     });
 });
