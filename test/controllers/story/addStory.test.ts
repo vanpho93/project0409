@@ -4,7 +4,7 @@ import { app } from '../../../src/app';
 import { Story } from '../../../src/models/Story';
 import { User } from '../../../src/models/User';
 
-describe.only('Test POST /story', () => {
+describe('Test POST /story', () => {
     let token;
     let idUser;
     beforeEach('Sign up, sign in to get token for test', async () => {
