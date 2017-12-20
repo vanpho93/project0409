@@ -8,6 +8,13 @@ export const storyRoute = Router();
 
 storyRoute.use(userMiddleware);
 storyRoute.use(json());
+
+storyRoute.put('/:idStory', (req: RequestWithUser, res) => {
+    Story.updateStoryContent(req.userId, req.params.idStory, req.body.content)
+    .then(story => res.send({ success: true, story }))
+    .catch(error => res.status(404).send({ success: false, error: error.message }));
+});
+
 storyRoute.post('/', (req: RequestWithUser, res) => {
     Story.addStory(req.userId, req.body.content)
     .then(story => res.send({ success: true, story }))
