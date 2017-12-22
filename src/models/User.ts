@@ -21,6 +21,9 @@ export class User extends UserMongo {
     _id: string;
     name: string;
     stories: Story [];
+    friends: User [];
+    sentRequests: User [];
+    imcomingRequests: User [];
     // { success: true, response: { token, user: {} } }
     static async signIn(email: string, password: string) {
         const user = await User.findOne({ email }) as User;
