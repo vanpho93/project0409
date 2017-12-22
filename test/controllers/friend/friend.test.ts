@@ -47,4 +47,28 @@ describe.only('Test POST /friend', () => {
         const user2 = await User.findById(idUser2).populate('friends') as User;
         assert.equal(user2.friends[0].name, 'Pho 1');
     });
+
+    it ('Can remove friend request', async () => {
+        await UserService.sendFriendRequest(idUser1, idUser2);
+        await request(app)
+        .post('/friend/removeRequest')
+        .set({ token: token1 })
+        .send({ idReceiver: idUser2 });
+        const user1 = await User.findById(idUser1).populate('sentRequests') as User;
+        assert.equal(user1.sentRequests.length, 0);
+        const user2 = await User.findById(idUser2).populate('imcomingRequests') as User;
+        assert.equal(user2.imcomingRequests.length, 0);
+    });
+
+    it ('Can decline friend request', async () => {
+        await UserService.sendFriendRequest(idUser1, idUser2);
+        await request(app)
+        .post('/friend/declineRequest')
+        .set({ token: token2 })
+        .send({ idSender: idUser1 });
+        const user1 = await User.findById(idUser1).populate('sentRequests') as User;
+        assert.equal(user1.sentRequests.length, 0);
+        const user2 = await User.findById(idUser2).populate('imcomingRequests') as User;
+        assert.equal(user2.imcomingRequests.length, 0);
+    });
 });
