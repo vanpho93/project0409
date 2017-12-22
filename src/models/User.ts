@@ -8,6 +8,9 @@ const userSchema = new Schema({
     password: { type: String, trim: true, required: true },
     name: { type: String, trim: true, required: true },
     stories: [{ type: Schema.Types.ObjectId, ref: 'Story' }],
+    friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    imcomingRequests: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    sentRequests: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 });
 
 const UserMongo = model('User', userSchema);

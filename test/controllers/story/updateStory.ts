@@ -4,7 +4,7 @@ import { app } from '../../../src/app';
 import { Story } from '../../../src/models/Story';
 import { User } from '../../../src/models/User';
 
-describe.only('Test PUT /story/:idStory', () => {
+describe('Test PUT /story/:idStory', () => {
     let token1;
     let token2;
     let idUser1;
