@@ -3,6 +3,7 @@ import * as request from 'supertest';
 import { app } from '../../../src/app';
 import { Story } from '../../../src/models/Story';
 import { User } from '../../../src/models/User';
+import { UserService } from '../../../src/models/UserService';
 
 describe.only('Test POST /friend', () => {
     let token1;
@@ -33,6 +34,17 @@ describe.only('Test POST /friend', () => {
     });
 
     it ('Can accept friend request', async () => {
-
+        await UserService.sendFriendRequest(idUser1, idUser2);
+        await request(app)
+        .post('/friend/acceptRequest')
+        .set({ token: token2 })
+        .send({ idSender: idUser1 });
+        const user1 = await User.findById(idUser1)
+        .populate('friends')
+        .populate('sentRequests') as User;
+        assert.equal(user1.friends[0].name, 'Pho 2');
+        assert.equal(user1.sentRequests.length, 0);
+        const user2 = await User.findById(idUser2).populate('friends') as User;
+        assert.equal(user2.friends[0].name, 'Pho 1');
     });
 });

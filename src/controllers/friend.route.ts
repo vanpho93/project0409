@@ -22,3 +22,17 @@ friendRoute.post('/acceptRequest', (req: RequestWithUser, res) => {
     .then(() => res.send({ success: true, message: 'Accepted' }))
     .catch(err => res.status(404).send({ success: false, message: err.message }));
 });
+
+friendRoute.post('/declineRequest', (req: RequestWithUser, res) => {
+    const { idSender } = req.body;
+    UserService.removeFriendRequest(idSender, req.userId)
+    .then(() => res.send({ success: true, message: 'Declined' }))
+    .catch(err => res.status(404).send({ success: false, message: err.message }));
+});
+
+friendRoute.post('/removeRequest', (req: RequestWithUser, res) => {
+    const { idReceiver } = req.body;
+    UserService.removeFriendRequest(req.userId, idReceiver)
+    .then(() => res.send({ success: true, message: 'Removed' }))
+    .catch(err => res.status(404).send({ success: false, message: err.message }));
+});

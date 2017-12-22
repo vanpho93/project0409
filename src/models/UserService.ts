@@ -10,6 +10,11 @@ export class UserService {
         await User.findByIdAndUpdate(idUser, { $addToSet: { friends: idRequestSender } });
         await User.findByIdAndUpdate(idRequestSender, { $addToSet: { friends: idUser } });
         await User.findByIdAndUpdate(idUser, { $pull: { imcomingRequests: idRequestSender } });
-        await User.findByIdAndUpdate(idRequestSender, { $pull: { sentRequests: idRequestSender } });
+        await User.findByIdAndUpdate(idRequestSender, { $pull: { sentRequests: idUser } });
+    }
+
+    static async removeFriendRequest(idSender: string, idReceiver: string) {
+        await User.findByIdAndUpdate(idSender, { $pull: { sentRequests: idReceiver } });
+        await User.findByIdAndUpdate(idReceiver, { $pull: { imcomingRequests: idSender } });
     }
 }
