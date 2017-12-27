@@ -1,3 +1,4 @@
+import * as cors from 'cors';
 import * as express from 'express';
 import { friendRoute } from './controllers/friend.route';
 import { likeRoute } from './controllers/like.route';
@@ -6,6 +7,7 @@ import { userRoute } from './controllers/user.route';
 
 export const app = express();
 
+app.use(cors());
 app.use('/user', userRoute);
 app.use('/story', storyRoute);
 app.use('/like', likeRoute);
