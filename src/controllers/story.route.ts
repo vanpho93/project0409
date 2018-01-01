@@ -21,6 +21,13 @@ storyRoute.post('/', (req: RequestWithUser, res) => {
     .catch(error => res.status(404).send({ success: false, error: error.message }));
 });
 
+storyRoute.get('/', (req: RequestWithUser, res) => {
+    Story.find({})
+    .populate('author', 'name')
+    .then(stories => res.send({ success: true, stories }))
+    .catch(error => res.status(404).send({ success: false, error: error.message }));
+});
+
 storyRoute.delete('/:idStory', (req: RequestWithUser, res) => {
     Story.removeStory(req.userId, req.params.idStory)
     .then(story => res.send({ success: true, story }))
